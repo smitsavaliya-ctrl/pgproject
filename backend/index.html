@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayNest - Live Database Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; }
+        .card { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; margin-top: 0; }
+        .price { color: #27ae60; font-weight: bold; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to StayNest 🏠</h1>
+    <p>Loading live data from MongoDB Atlas...</p>
+    
+    <!-- This empty div is where our JavaScript will inject the properties -->
+    <div id="properties-container"></div>
+
+    <script>
+        // 1. Fetch the data from your running Express server
+        fetch("http://localhost:5000/api/properties")
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById("properties-container");
+                container.innerHTML = ""; // Clear the "Loading" text
+
+                // 2. Grab just the first 10 properties to keep it simple for now
+                const firstTenProperties = data.properties.slice(0, 10);
+
+                // 3. Loop through them and create a visual HTML card for each one
+                firstTenProperties.forEach(property => {
+                    const card = document.createElement("div");
+                    card.className = "card";
+                    card.innerHTML = `
+                        <h2>${property.name}</h2>
+                        <p><strong>City:</strong> ${property.city} | <strong>Area:</strong> ${property.area}</p>
+                        <p><strong>Type:</strong> ${property.gender}</p>
+                        <p class="price">Rent: ₹${property.rent} / month</p>
+                    `;
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching properties:", error);
+                document.getElementById("properties-container").innerHTML = "<p style='color:red;'>Make sure your backend server is running!</p>";
+            });
+    </script>
+
+</body>
+</html>

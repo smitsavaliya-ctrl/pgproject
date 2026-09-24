@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StayNest - Find Your Perfect Student Stay</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet GIS Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+
+  <!-- Pannellum 360° Street View & Panorama WebGL Viewer Library -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+
+  <!-- Firebase Auth & Real Google Identity Toolkit API SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+  <!-- Official Google Identity Services SDK for Real Google Accounts OAuth -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
+  <!-- StayNest Design System Stylesheets -->
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/pages.css">
+  <link rel="stylesheet" href="./css/responsive.css">
+
+  <style>
+    /* Signature StayNest Purple Brand Splash Preloader Animations */
+    @keyframes splashFadeIn {
+      from { opacity: 0; transform: scale(0.94); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes splashDotBounce {
+      0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column;">
+
+  <!-- Premium StayNest Brand Preloader -->
+  <div id="staynest-splash-loader" style="position: fixed; inset: 0; background: #0f172a; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.4s ease, visibility 0.4s ease;">
+    <div style="text-align: center; animation: splashFadeIn 0.5s ease-out forwards;">
+      
+      <!-- Brand Logo Badge -->
+      <div style="background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%); width: 72px; height: 72px; border-radius: 22px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem auto; box-shadow: 0 12px 30px rgba(99, 102, 241, 0.45); border: 2px solid rgba(255, 255, 255, 0.15);">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+
+      <!-- App Name & Subtitle -->
+      <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2.2rem; font-weight: 800; color: #ffffff; margin: 0 0 0.35rem 0; letter-spacing: -0.02em;">
+        Stay<span style="color: #818cf8;">Nest</span>
+      </h1>
+      <p style="color: #94a3b8; font-size: 0.92rem; font-weight: 500; margin: 0 0 2rem 0;">
+        Verified PGs, Hostels & Student Living Across India
+      </p>
+
+      <!-- Animated Pulse Dot Wave Loader -->
+      <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
+        <div style="width: 10px; height: 10px; background: #6366f1; border-radius: 50%; animation: splashDotBounce 1.4s infinite ease-in-out both; animation-delay: -0.32s;"></div>
+        <div style="width: 10px; height: 10px; background: #818cf8; border-radius: 50%; animation: splashDotBounce 1.4s infinite ease-in-out both; animation-delay: -0.16s;"></div>
+        <div style="width: 10px; height: 10px; background: #c7d2fe; border-radius: 50%; animation: splashDotBounce 1.4s infinite ease-in-out both;"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Main Navbar Container -->
+  <div id="navbar-root"></div>
+
+  <!-- Main Application Route Views Viewport -->
+  <main id="app-root" style="flex: 1; min-height: 80vh;"></main>
+
+  <!-- Main Footer Container -->
+  <div id="footer-root"></div>
+
+  <!-- Leaflet GIS Map Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+  <!-- Application Main Entry Script -->
+  <script type="module" src="./js/main.js?v=81000_GENERIC_XYZ_GMAIL_PLACEHOLDERS"></script>
+
+  <script>
+    // Dismiss preloader safely once page DOM initializes
+    window.addEventListener('load', function() {
+      const loader = document.getElementById('staynest-splash-loader');
+      if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 400);
+      }
+    });
+
+    // Fallback timer to hide splash screen after 1.5 seconds max
+    setTimeout(() => {
+      const loader = document.getElementById('staynest-splash-loader');
+      if (loader && loader.style.display !== 'none') {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 400);
+      }
+    }, 1500);
+  </script>
+</body>
+</html>
